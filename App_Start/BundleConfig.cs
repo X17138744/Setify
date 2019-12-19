@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace SetifyFinal
 {
@@ -23,7 +22,7 @@ namespace SetifyFinal
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap-spacelab.css",
+                      "~/Content/bootstrap.css",
                       "~/Content/site.css"));
         }
     }

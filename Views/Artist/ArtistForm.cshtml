@@ -1,0 +1,30 @@
+﻿@model SetifyFinal.Models.ArtistFormViewModel
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<h2>@Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Artist"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Artist.Name)
+        @Html.TextBoxFor(m => m.Artist.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Artist.ReleaseDate)
+        @Html.TextBoxFor(m => m.Artist.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Artist.GenreId)
+        @Html.DropDownListFor(m => m.Artist.GenreId, new SelectList(Model.Genres, "Id", "Name"), "", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Artist.NumberInStock)
+        @Html.TextBoxFor(m => m.Artist.NumberInStock, new { @class = "form-control" })
+    </div>
+    @Html.HiddenFor(m => m.Artist.Id)
+    <button type="submit" class="btn btn-primary">Save</button>
+}
+

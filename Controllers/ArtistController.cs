@@ -1,53 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using SetifyFinal.Models;
+using SetifyFinal.ViewModels;
+using SetifyFinal.Migrations;
 
-namespace SetifyFinal.Controllers
+namespace Vidly.Controllers
 {
     public class ArtistController : Controller
     {
-        // GET: Artist
-        public ActionResult Random()
+        private ApplicationDbContext _context;
+
+        public ArtistController()
         {
-            var artist = new Artist() {Name = "Radiohead"};
+            _context = new ApplicationDbContext();
+        }
 
-            //View dictionary and pass artist to view.
-            ViewData["Artist"] = artist;
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
-            //Other  Action results can include...
-            //return Content ("Hello World");
-            //return HttpNotFound();
-            //return RedirectToAction
-            return View();
+        public ViewResult Index()
+        {
+            var artists = _context.Artists.Include(m => m.Genre).ToList();
+
+            return View(artists);    
+        }
+
+        public ViewResult New()
+        {
+            var genres = _context.Genres.ToList();
+
+            var viewModel = new ArtistFormViewModel
+            {
+                Genres = genres
+            };
+
+            return View("ArtistForm", viewModel);
         }
 
         public ActionResult Edit(int id)
         {
-            return Content("id=" + id);
+            var artist = _context.Artists.SingleOrDefault(c => c.Id == id);
+
+            if (artist == null)
+                return HttpNotFound();
+
+            var viewModel = new ArtistFormViewModel
+            {
+                Artist = artist,
+                Genres = _context.Genres.ToList()
+            };
+
+            return View("ArtistForm", viewModel);
         }
 
-        //Artists
-        public ActionResult Index(int? pageIndex, string sortBy)
+
+        public ActionResult Details(int id)
         {
-            //Check to see if there is a value
-            if (!pageIndex.HasValue)
-                pageIndex = 1;
+            var artist = _context.Artists.Include(m => m.Genre).SingleOrDefault(m => m.Id == id);
 
-            //Sort by Name
-            if (String.IsNullOrWhiteSpace(sortBy))
-                sortBy = "Name";
+            if (artist == null)
+                return HttpNotFound();
 
-            //Page equals first and second parameter
-            return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
+            return View(artist);
+
         }
 
-        public ActionResult ByReleaseMonth(int year, int month)
+
+        // GET: Artist/Random
+        public ActionResult Random()
         {
-            //Returns the pathing of year and month
-            return Content(year + "/" + month);
+            var artist = new Artist() { Name = "Radiohead" };
+            var customers = new List<Customer>
+            {
+                new Customer { Name = "Customer 1" },
+                new Customer { Name = "Customer 2" }
+            };
+
+            var viewModel = new RandomArtistViewModel
+            {
+                Artist = artist,
+                Customers = customers
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Save(Artist artist)
+        {
+            if (artist.Id == 0)
+            {
+                artist.DateAdded = DateTime.Now;
+                _context.Artists.Add(artist);
+            }
+            else
+            {
+                var artistInDb = _context.Artists.Single(m => m.Id == artist.Id);
+                artistInDb.Name = artist.Name;
+                artistInDb.GenreId = artist.GenreId;
+                artistInDb.NumberInStock = artist.NumberInStock;
+                artistInDb.ReleaseDate = artist.ReleaseDate;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Artist");
         }
     }
 }

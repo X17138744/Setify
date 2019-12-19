@@ -1,0 +1,28 @@
+﻿@model IEnumerable<SetifyFinal.Models.Artist>
+
+@{
+    ViewBag.Title = "Add Artist";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Artists</h2>
+<p>
+    @Html.ActionLink("New Artist to Add!", "New", "Artist", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>Artist</th>
+        <th>Genre</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var artist in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(artist.Name, "Edit", "Artist", new {id = artist.Id}, null)</td>
+            <td>@artist.Genre.Name</td>
+        </tr>
+    }
+    </tbody>
+</table>

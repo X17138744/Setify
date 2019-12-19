@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace SetifyFinal
@@ -19,7 +15,7 @@ namespace SetifyFinal
             routes.MapRoute(
                 "TracksByReleaseDate",
                 "artist/tracks/{year}/{month}",
-                new {controller = "Artist", action = "ByReleaseMonth"},
+                new { controller = "Artist", action = "ByReleaseMonth" },
                 //Add Constraints to the routes on year and date verbatim string on pathing
                 new { year = @"\d{4}", month = @"\d{2}" });
 
