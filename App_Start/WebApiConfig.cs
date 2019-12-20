@@ -1,4 +1,6 @@
 ﻿using System.Web.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace SetifyFinal
 {
@@ -8,7 +10,10 @@ namespace SetifyFinal
         {
             // Web API configuration and services
 
-            // Web API routes
+            // Web API routes plus enable camel casing feature
+            var settings = config.Formatters.JsonFormatter.SerializerSettings;
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            settings.Formatting = Formatting.Indented;
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

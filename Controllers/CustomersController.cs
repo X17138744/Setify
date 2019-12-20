@@ -26,16 +26,31 @@ namespace SetifyFinal.Controllers
             var membershipTypes = _context.MembershipTypes.ToList();
             var viewModel = new CustomerFormViewModel
             {
+                Customer = new Customer(),
                 MembershipTypes = membershipTypes
             };
 
             return View("CustomerForm", viewModel);
         }
 
-        //Save button AND saves data in new Accounts
+        //Save button AND saves data in new Accounts PLUS anti-forge token initiation
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
+            //Modelstate property for validation
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+
+
             if (customer.Id == 0)
                 _context.Customers.Add(customer);
             else
@@ -57,10 +72,8 @@ namespace SetifyFinal.Controllers
         //Customers property is defined in our database so with this we can get all customers in the database
         public ViewResult Index()
         {
-            //Eager Loading implementation example
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-
-            return View(customers);
+            //Now optimised on Ajax Request in Index Page!
+            return View();
         }
 
         public ActionResult Details(int id)

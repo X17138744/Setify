@@ -5,6 +5,7 @@ using Microsoft.Owin.Security.Cookies;
 using Owin;
 using SetifyFinal.Models;
 using System;
+using Microsoft.Owin.Security.Google;
 
 namespace SetifyFinal
 {
@@ -57,11 +58,11 @@ namespace SetifyFinal
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "137282605835-vbaikapmjdcq96c8n8iltlphfqu8qd96.apps.googleusercontent.com",
+                ClientSecret = "3CgFoeCJn7McvrKXPquVHpJW"
+            });
         }
     }
 }

@@ -1,30 +1,39 @@
-﻿@model SetifyFinal.Models.CustomerFormViewModel
+﻿@model SetifyFinal.ViewModels.ArtistFormViewModel
+
 @{
-    ViewBag.Title = "New";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.Title;
 }
 
-<h2>New Customer</h2>
+<h2>@Model.Title</h2>
 
-@using (Html.BeginForm("Save", "Customers"))
+@using (Html.BeginForm("Save", "Artist"))
 {
+    @Html.ValidationSummary(true, "Please fix the following errors.")
     <div class="form-group">
-        @Html.LabelFor(m => m.Customer.Name)
-        @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Customer.Birthdate)
-        @Html.TextBoxFor(m => m.Customer.Birthdate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Customer.MembershipTypeId)
-        @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipTypes, "Id", "Name"), "Select Membership Type", new { @class = "form-control" })
+        @Html.LabelFor(m => m.ReleaseDate)
+        @Html.TextBoxFor(m => m.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ReleaseDate)
     </div>
-    <div class="checkbox">
-        <label>
-            @Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsletter) Subscribed to Newsletter?
-        </label>
+    <div class="form-group">
+        @Html.LabelFor(m => m.GenreId)
+        @Html.DropDownListFor(m => m.GenreId, new SelectList(Model.Genres, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.GenreId)
     </div>
-    @Html.HiddenFor(m => m.Customer.Id)
+    <div class="form-group">
+        @Html.LabelFor(m => m.NumberInStock)
+        @Html.TextBoxFor(m => m.NumberInStock, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.NumberInStock)
+    </div>
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">Save</button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
 }

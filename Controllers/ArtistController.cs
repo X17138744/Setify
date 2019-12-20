@@ -5,9 +5,8 @@ using System.Linq;
 using System.Web.Mvc;
 using SetifyFinal.Models;
 using SetifyFinal.ViewModels;
-using SetifyFinal.Migrations;
 
-namespace Vidly.Controllers
+namespace SetifyFinal.Controllers
 {
     public class ArtistController : Controller
     {
@@ -25,16 +24,19 @@ namespace Vidly.Controllers
 
         public ViewResult Index()
         {
-            var artists = _context.Artists.Include(m => m.Genre).ToList();
+            if (User.IsInRole(RoleName.CanManageArtists))
+                return View("List");
 
-            return View(artists);    
+            return View("ReadOnlyList");
         }
 
+        //Handles authorization seperately on a different class to avoid Magic Numbers
+        [Authorize(Roles = RoleName.CanManageArtists)]
         public ViewResult New()
         {
             var genres = _context.Genres.ToList();
 
-            var viewModel = new ArtistFormViewModel
+            var viewModel = new ArtistFormViewModel()
             {
                 Genres = genres
             };
@@ -49,9 +51,8 @@ namespace Vidly.Controllers
             if (artist == null)
                 return HttpNotFound();
 
-            var viewModel = new ArtistFormViewModel
+            var viewModel = new ArtistFormViewModel(artist)
             {
-                Artist = artist,
                 Genres = _context.Genres.ToList()
             };
 
@@ -71,7 +72,7 @@ namespace Vidly.Controllers
         }
 
 
-        // GET: Artist/Random
+        // GET: Artists/Random
         public ActionResult Random()
         {
             var artist = new Artist() { Name = "Radiohead" };
@@ -81,7 +82,7 @@ namespace Vidly.Controllers
                 new Customer { Name = "Customer 2" }
             };
 
-            var viewModel = new RandomArtistViewModel
+            var viewModel = new RandomArtistViewModel()
             {
                 Artist = artist,
                 Customers = customers
@@ -91,8 +92,19 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Artist artist)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new ArtistFormViewModel(artist)
+                {
+                    Genres = _context.Genres.ToList()
+                };
+
+                return View("ArtistForm", viewModel);
+            }
+
             if (artist.Id == 0)
             {
                 artist.DateAdded = DateTime.Now;

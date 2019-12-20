@@ -1,4 +1,4 @@
-﻿@model SetifyFinal.Models.ArtistFormViewModel
+﻿@model SetifyFinal.ViewModels.ArtistFormViewModel
 
 @{
     ViewBag.Title = Model.Title;
@@ -8,23 +8,32 @@
 
 @using (Html.BeginForm("Save", "Artist"))
 {
+    @Html.ValidationSummary(true, "Please fix the following errors.")
     <div class="form-group">
-        @Html.LabelFor(m => m.Artist.Name)
-        @Html.TextBoxFor(m => m.Artist.Name, new { @class = "form-control" })
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Artist.ReleaseDate)
-        @Html.TextBoxFor(m => m.Artist.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.LabelFor(m => m.ReleaseDate)
+        @Html.TextBoxFor(m => m.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ReleaseDate)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Artist.GenreId)
-        @Html.DropDownListFor(m => m.Artist.GenreId, new SelectList(Model.Genres, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.LabelFor(m => m.GenreId)
+        @Html.DropDownListFor(m => m.GenreId, new SelectList(Model.Genres, "Id", "Name"), "", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.GenreId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Artist.NumberInStock)
-        @Html.TextBoxFor(m => m.Artist.NumberInStock, new { @class = "form-control" })
+        @Html.LabelFor(m => m.NumberInStock)
+        @Html.TextBoxFor(m => m.NumberInStock, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.NumberInStock)
     </div>
-    @Html.HiddenFor(m => m.Artist.Id)
+    @Html.HiddenFor(m => m.Id)
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">Save</button>
 }
-
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

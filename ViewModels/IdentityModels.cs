@@ -24,6 +24,7 @@ namespace SetifyFinal.Models
         public DbSet<Artist> Artists { get; set; }
         public DbSet<MembershipType> MembershipTypes { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Releases> Releases { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
