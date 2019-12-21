@@ -18,14 +18,23 @@ namespace SetifyFinal.Controllers.Api
             _context = new ApplicationDbContext();
         }
 
-        public IEnumerable<ArtistDto> GetArtist()
+        
+        //Have got a artists query and applied a where clause to only get avail methods!
+        public IEnumerable<ArtistDto> GetArtist(string query = null)
         {
-            return _context.Artists
+            var artistsQuery = _context.Artists
                 .Include(m => m.Genre)
+                .Where(m => m.NumberAvailable > 0);
+
+            if (!String.IsNullOrWhiteSpace(query))
+                artistsQuery = artistsQuery.Where(m => m.Name.Contains(query));
+
+            return artistsQuery
                 .ToList()
                 .Select(Mapper.Map<Artist, ArtistDto>);
         }
 
+        //Applies a "mapper" object instead is listing out every attribute. Then it gets applied to the vars in the "Artist DTO" class and away you go!
         public IHttpActionResult GetArtist(int id)
         {
             var artist = _context.Artists.SingleOrDefault(c => c.Id == id);
@@ -36,6 +45,7 @@ namespace SetifyFinal.Controllers.Api
             return Ok(Mapper.Map<Artist, ArtistDto>(artist));
         }
 
+        //Create
         [HttpPost]
         public IHttpActionResult CreateArtist(ArtistDto artistDto)
         {
@@ -50,6 +60,7 @@ namespace SetifyFinal.Controllers.Api
             return Created(new Uri(Request.RequestUri + "/" + artist.Id), artistDto);
         }
 
+        //Update
         [HttpPut]
         public IHttpActionResult UpdateArtist(int id, ArtistDto artistDto)
         {
@@ -68,6 +79,7 @@ namespace SetifyFinal.Controllers.Api
             return Ok();
         }
 
+        //Deletion of course
         [HttpDelete]
         public IHttpActionResult DeleteArtist(int id)
         {

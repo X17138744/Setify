@@ -16,8 +16,8 @@ namespace SetifyFinal.Models
         [Required] 
         public Artist Artist { get; set; }
 
-        public DateTime? DateReleased { get; set; }
-
         public DateTime DatePurchased { get; set; }
+
+        public DateTime? DateReleased { get; set; }
     }
 }

@@ -1,6 +1,11 @@
-﻿body {
+﻿.body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-image: url(../../Content/Image/setify_final.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: auto;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -24,10 +29,10 @@ textarea {
 }
 
 /* Validation area for red warning */
-.field-validation-error {
+.field-validation-error , label.error {
     color: red;
 }
 
-.input-validation-error {
+.input-validation-error , input.error {
     border: 2px solid red;
 }

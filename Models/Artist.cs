@@ -25,5 +25,8 @@ namespace SetifyFinal.Models
         [Display(Name = "Number in Stock")]
         [Range(1, 20)]
         public byte NumberInStock { get; set; }
+
+        //Number property later migration for Releases
+        public byte NumberAvailable { get; set; }
     }
 }

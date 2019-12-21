@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using SetifyFinal.Models;
+using SetifyFinal.Dtos;
 
 namespace SetifyFinal.Dtos
 {
-    
-    //This class is designed to bring in all the customer attributes from the Customers API
-    // DATA Transfer Objects
+    //Customer vars for API
     
     public class CustomerDto
     {
@@ -25,7 +20,7 @@ namespace SetifyFinal.Dtos
 
         public MembershipTypeDto MembershipType { get; set; }
 
-        //[Min18YearsIfAMember]
+        //        [Min18YearsIfAMember]
         public DateTime? Birthdate { get; set; }
     }
 }

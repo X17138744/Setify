@@ -5,6 +5,8 @@ using System.Web;
 
 namespace SetifyFinal.Dtos
 {
+    //Genre vars for API
+
     public class GenreDto
     {
         public byte Id { get; set; }

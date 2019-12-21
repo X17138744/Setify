@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SetifyFinal.Dtos
 {
+    //Artist vars for API
+    
     public class ArtistDto
     {
         public int Id { get; set; }
